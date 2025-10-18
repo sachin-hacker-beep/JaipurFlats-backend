@@ -157,6 +157,7 @@ app.post("/User/SignUp", async (req, res) => {
 app.post("/User/SignIn", async (req, res) => {
     try{
         const {email, password} = req.body;
+        console.log("SignIn attempt for email:", email);
         if(!email || !password || email.trim()=== "" || password.trim() === ""){
             return res.status(400).json({message: "All Fields Are Required"});
         }
