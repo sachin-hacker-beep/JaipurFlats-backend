@@ -28,7 +28,7 @@ app.get("/properties",(req, resp)=>{
 app.get("/properties/MyProperty",verifyToken, async (req, resp)=>{
     
     try{
-        const {useremail} = req.user;
+        const {useremail} = req.body;
         const property = await Property.find({useremail});
         if(!property){
             return resp.status(404).json({message: "No Properties Found"});
