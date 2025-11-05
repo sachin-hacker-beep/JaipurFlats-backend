@@ -82,7 +82,7 @@ app.put("/property/update/:id",verifyToken, async (req,resp)=>{
     catch(err){
         resp.status(500).send({message:"Error Occured"});
     }
-    }
+    } 
 );
 app.delete("/property/delete/:id", verifyToken , async (req,res)=>{
     
@@ -129,7 +129,7 @@ app.get("/GetAllUsers", async (req,res)=>{
 
 app.post("/User/SignUp", async (req, res) => {
     try{
-        const {Username, email, password} = req.body;
+        const {Username, email, password, role} = req.body;
         if(!Username || !email || !password || Username.trim() === "" || email.trim() === "" || password.trim() === ""){
             res.status(400).json({message: "All Fields Are Required"})
         }
@@ -141,11 +141,11 @@ app.post("/User/SignUp", async (req, res) => {
         const newUser = new user({
             Username,
             email,
-            password: HashedPassword
+            password: HashedPassword,
+            role: role || "user"
         })
         await newUser.save();
         res.status(200).json({message: "User Registered Successfully"});
-        windo
     }
 
     catch(err){
@@ -167,11 +167,11 @@ app.post("/User/SignIn", async (req, res) => {
         }
         const passwordMatch = await bcrypt.compare(password, existingUser.password);
         if(!passwordMatch){
-            return res.status(401).json({message: "Invalid Credentials"}).log("Invalid password attempt:", email);
+            return res.status(401).json({message: "Invalid Credentials"})
         }
-        const payload = {id: existingUser._id, email: existingUser.email};
+        const payload = {id: existingUser._id, email: existingUser.email, role: existingUser.role};
         const token = jwt.sign(payload,process.env.JWT_SECRET_KEY,{expiresIn: process.env.JWT_EXPIRE_IN});
-        res.status(200).json({message: "Sign In Successful", token,username: existingUser.Username});
+        res.status(200).json({message: "Sign In Successful", token,username: existingUser.Username, role: existingUser.role});
         console.log("User signed in successfully:", existingUser.Username); 
     }
     catch(err){

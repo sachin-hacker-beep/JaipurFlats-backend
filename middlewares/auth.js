@@ -8,12 +8,14 @@ export const verifyToken = (req,res,next)=>{
         return res.status(401).json({message: "unauthorized request"});
     }
     const authHeaderToken = authHeader.split(" ")[1];
-    try{
-        const decoded = jwt.verify(authHeaderToken, process.env.JWT_SECRET_KEY);
-        req.user = decoded;
-        next();
-    }
-    catch(err){
-        return res.status(500).json({message: "Invalid token"});
-    }
-}
+        const decoded = jwt.verify(authHeaderToken, process.env.JWT_SECRET_KEY, (err, decoded)=>{
+            if(err){
+                if(err.name==="TokenExpiredError"){
+                    return res.status(401).json({message:"Token Expired"});
+                }
+                return res.status(403).json({message:"Invalid Token"});
+            }
+            req.user = decoded;
+            next();
+        });
+};
