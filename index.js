@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { verifyToken } from "./middlewares/auth.js";
+import { verifyAdmin } from "./middlewares/adminauth.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -43,7 +44,7 @@ app.get("/properties/MyProperty",verifyToken, async (req, resp)=>{
         resp.status(500).json({message: "Error occured",error: err.message})
     }
 });
-app.post("/add-property",verifyToken ,async (req,resp)=>{
+app.post("/add-property",verifyToken, verifyAdmin,async (req,resp)=>{
     try{
         const UserId = req.user.id;
         const last = await Property.findOne().sort({id:-1});

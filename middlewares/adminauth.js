@@ -1,6 +1,11 @@
-const export verifyAdmin = (req,res,next)=>{
-    if(req.existingUser.role !== "admin"){
-        return res.status(403).json({message:"Access Denied "})
+export const verifyAdmin = (req,res,next)=>{
+    try{
+        if(req.existingUser.role !== "admin"){
+            return res.status(403).json({message:"Access Denied "})
+        }
+    }
+    catch(err){
+        return res.status(500).json({message:"verify Admin Middleware Error", error: err.message})
     }
     next();
-}
+}  
