@@ -1,7 +1,7 @@
 export const verifyAdmin = (req,res,next)=>{
     try{
         if(req.user.role !== "admin"){
-            return res.status(403).json({message:"Access Denied "})
+            return res.status(405).json({message:"Access Denied, you are not admin "})
         }
     }
     catch(err){
