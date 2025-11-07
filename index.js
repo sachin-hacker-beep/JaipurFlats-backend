@@ -30,13 +30,13 @@ app.get("/properties/MyProperty",verifyToken, async (req, resp)=>{
     try{
         const useremail = req.user.email;
         console.log(useremail,"requested to fetch their properties")
-        // const property = await Property.find({useremail});
-        // if(!property){
-            // return resp.status(404).json({message: "No Properties Found"});
-        // }
+        const property = await Property.find({useremail});
+        if(!property){
+            return resp.status(404).json({message: "No Properties Found"});
+        }
         
-        // resp.json({ message: "Properties fetched successfully", properties: property });
-        resp.json({ message: "Properties fetched successfully"});
+        resp.json({ message: "Properties fetched successfully", properties: property });
+        // resp.json({ message: "Properties fetched successfully"});
     }
     catch(err){
         console.log("Error while fetching user's properties:", err);
