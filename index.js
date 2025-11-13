@@ -64,16 +64,16 @@ app.post("/add-property",verifyToken, verifyAdmin,async (req,resp)=>{
     
    
 app.put("/property/update/:id",verifyToken, async (req,resp)=>{
-    try{
-        const UserId = req.user.id;
+    try{   
+        // const UserId = req.user.id;
         const {id} = req.params;
         const property = await Property.findOne({id: Number(id)});
         if(!property){
             return resp.status(404).json({message: "Property Not Found"});
         }
-        if(property.UserId.toString() !== UserId){
-            return resp.status(403).json({message: "You Are Not Authorized To Update This Property"})
-        }
+        // if(property.UserId.toString() !== UserId){
+            // return resp.status(403).json({message: "You Are Not Authorized To Update This Property"})
+        // }
         const updated = await Property.findOneAndUpdate(
             {id:Number(id)},
             {...req.body},
