@@ -44,6 +44,21 @@ app.get("/properties/MyProperty",verifyToken, async (req, resp)=>{
         resp.status(500).json({message: "Error occured",error: err.message})
     }
 });
+app.post("/property/FindProperty",verifyToken, verifyAdmin, async (req, resp)=>{
+    try{
+        const {email} = req.body;
+        const property = await Property.find({email});
+        if(property.length===0){
+            return resp.status(404).json({message:"no Properties found"});
+        }
+        resp.json({message:"properties fetched successfully", property});
+
+    }
+    catch(err){
+        console.log("Error while fetching properties by admin:", err);
+        resp.status(500).json({message:"Error Occured", error: err.message})
+    }
+});
 app.post("/add-property",verifyToken, verifyAdmin,async (req,resp)=>{
     try{
         const UserId = req.user.id;
