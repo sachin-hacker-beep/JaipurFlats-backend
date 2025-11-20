@@ -32,7 +32,7 @@ app.get("/properties/MyProperty",verifyToken, async (req, resp)=>{
         const useremail = req.user.email;
         console.log(useremail,"requested to fetch their properties")
         const property = await Property.find({useremail});
-        if(!property){
+        if(property.length === 0){
             return resp.status(404).json({message: "No Properties Found"});
         }
         
@@ -63,7 +63,7 @@ app.post("/add-property",verifyToken, verifyAdmin,async (req,resp)=>{
      });
     
    
-app.put("/property/update/:id",verifyToken, async (req,resp)=>{
+app.put("/property/update/:id",verifyToken, verifyAdmin, async (req,resp)=>{
     try{   
         // const UserId = req.user.id;
         const {id} = req.params;
@@ -71,9 +71,9 @@ app.put("/property/update/:id",verifyToken, async (req,resp)=>{
         if(!property){
             return resp.status(404).json({message: "Property Not Found"});
         }
-        // if(property.UserId.toString() !== UserId){
-            // return resp.status(403).json({message: "You Are Not Authorized To Update This Property"})
-        // }
+        if(property.UserId.toString() !== UserId){
+            return resp.status(403).json({message: "You Are Not Authorized To Update This Property"})
+        }
         const updated = await Property.findOneAndUpdate(
             {id:Number(id)},
             {...req.body},
