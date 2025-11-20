@@ -46,8 +46,8 @@ app.get("/properties/MyProperty",verifyToken, async (req, resp)=>{
 });
 app.post("/property/FindProperty",verifyToken, verifyAdmin, async (req, resp)=>{
     try{
-        const {email} = req.body;
-        const property = await Property.find({email});
+        const {useremail} = req.body;
+        const property = await Property.find({useremail});
         if(property.length===0){
             return resp.status(404).json({message:"no Properties found"});
         }
@@ -199,5 +199,4 @@ app.post("/User/SignIn", async (req, res) => {
     }
 });    
 app.listen(PORT, ()=>{
-    console.log(`Server is running on port ${PORT}`);
-});
+    console.log(`Server is running on port ${PORT}`);
