@@ -103,19 +103,19 @@ app.put("/property/update/:id",verifyToken, verifyAdmin, async (req,resp)=>{
     }
     } 
 );
-app.delete("/property/delete/:id", verifyToken , async (req,res)=>{
+app.delete("/property/delete/:id", verifyToken , verifyAdmin, async (req,res)=>{
     
     try{
         const UserId = req.user.id;
         const {id} = req.params;
         const property = await Property.findOne({id: Number(id)}); 
-        console.log(property);
         if(!property){
             return res.status(404).json({message: "Property Not Found"})
         }
         if(property.UserId.toString() !== UserId){
-            return res.status(403).json({message: "You Are Not Authorized Person"});
+            return res.status(403).json({message: "You Are Not Admin "});
         }
+        console.log(property);
         const deleted = await Property.findOneAndDelete({id:Number(id)});
         if(!deleted){
             return res.status(404).json({message:"Property Not Deleted"})
