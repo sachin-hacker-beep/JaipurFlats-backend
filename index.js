@@ -80,7 +80,7 @@ app.post("/add-property",verifyToken, verifyAdmin,async (req,resp)=>{
    
 app.put("/property/update/:id",verifyToken, verifyAdmin, async (req,resp)=>{
     try{   
-        // const UserId = req.user.id;
+        const UserId = req.user.id;
         const {id} = req.params;
         const property = await Property.findOne({id: Number(id)});
         if(!property){
